@@ -210,7 +210,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
                 },
                 tooltip: 'Open food menu',
-                child: const Icon(Icons.add_photo_alternate_outlined),
+                child: const Icon(Icons.food_bank),
               ),
             ],
           ),
@@ -274,7 +274,7 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text("Menu Home Page"),
         actions: <Widget> [
           Center(
-            child:Text("View selected food:     "),
+            child:Text("View selected foods:     "),
           ),
           DropdownButton<String>(
             value: dropdownValue,
@@ -287,14 +287,36 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             onChanged: (String? newValue) {
               setState(() {
-                dropdownValue = newValue!;
+                for(int i = 0; i < dropDownItems.length; i++)
+                {
+                  if (dropDownItems[i] == newValue!)
+                  {
+                    if (i != 0)
+                    {
+                      dropDownItems.removeAt(i);
+                      i = dropDownItems.length + 1;
+                    }
+                    if (i == 0)
+                    {
+                      i = dropDownItems.length + 1;
+                    }
+                  }
+                }
               });
+
             },
             items: dropDownItems
                 .map<DropdownMenuItem<String>>((String value) {
               return DropdownMenuItem<String>(
                 value: value,
-                child: Text(value.toString()),
+                child: Wrap(
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  children: [
+                    Text(value.toString()+ "    "),
+                    Icon(Icons.cancel,
+                    color: Colors.red),
+                  ],
+                ),
               );
             }).toList(),
           ),
@@ -319,7 +341,10 @@ class _MyHomePageState extends State<MyHomePage> {
             heroTag: "btn2",
             onPressed: () {
 
-
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => MyBillPage(title: 'Pay Bill', totalList: totalItems, totalCost: orderTotal)),
+              );
 
 
             },
@@ -500,7 +525,7 @@ class _MyFoodMenuPageState extends State<MyFoodMenuPage> {
         title: Text(widget.title),
         actions: <Widget>[
           Center(
-            child:Text("View selected food:     "),
+            child:Text("View selected foods:     "),
           ),
           DropdownButton<String>(
             value: dropdownValue,
@@ -536,7 +561,14 @@ class _MyFoodMenuPageState extends State<MyFoodMenuPage> {
                 .map<DropdownMenuItem<String>>((String value) {
               return DropdownMenuItem<String>(
                 value: value,
-                child: Text(value.toString()),
+                child: Wrap(
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  children: [
+                    Text(value.toString()+ "    "),
+                    Icon(Icons.cancel,
+                    color: Colors.red),
+                  ],
+                ),
               );
             }).toList(),
           ),
@@ -690,11 +722,16 @@ class _MyFoodMenuPageState extends State<MyFoodMenuPage> {
         // Center is a layout widget. It takes a single child and positions it
         // in the middle of the parent.
         child: Container(
-          width: 100,
+          width: 400,
           child: Column(
             children:<Widget> [
-              Container(
-              child: FloatingActionButton(
+              Text("Food Menu",
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 24,
+          ),
+              ),
+              FloatingActionButton(
                 heroTag: "x",
                 onPressed: () {
 
@@ -704,7 +741,7 @@ class _MyFoodMenuPageState extends State<MyFoodMenuPage> {
                 tooltip: 'Add To Order',
                 child: const Text("Add To Order"),
               ),
-              ),
+
           ],
 
           ),

@@ -796,6 +796,400 @@ class _MyFoodMenuPageState extends State<MyFoodMenuPage> {
   }
 }
 
+class MyDrinkMenuPage extends StatefulWidget {
+  const MyDrinkMenuPage({Key? key, required this.title, required this.selectedPrices, required this.dropDownItems, required this.totalItems, required this.orderTotal, required this.loadState}) : super(key: key);
+
+  // This widget is the home page of your application. It is stateful, meaning
+  // that it has a State object (defined below) that contains fields that affect
+  // how it looks.
+
+  // This class is the configuration for the state. It holds the values (in this
+  // case the title) provided by the parent (in this case the App widget) and
+  // used by the build method of the State. Fields in a Widget subclass are
+  // always marked "final".
+
+  final String title;
+
+  final List<String> dropDownItems;
+  final List<int> selectedPrices;
+
+  final double orderTotal;
+  final List<String> totalItems;
+
+  final String loadState;
+
+  @override
+  State<MyDrinkMenuPage> createState() => _MyDrinkMenuPageState();
+}
+
+class _MyDrinkMenuPageState extends State<MyDrinkMenuPage> {
+  String _imageSrc = 'assets/images/nocheese.png';
+  double _imageTransparency = 1;
+  Color _colour = Color(0xff7c94b6);
+
+  List<String> items = ["Hamburger - \$10", "Cheeseburger - \$12", "Grilled Cheese - \$8", "Chicken Fingers - \$8"];
+  List<int> prices = [10, 12, 8, 8];
+
+  String selectedItem = "Hamburger - \$10";
+  int selectedPrice = 10;
+
+  String dropdownValue = "No Items Selected";
+  List<String> dropDownItems = ["No Items Selected"];
+  List<int> selectedPrices = [0];
+  int dropDownIndex = 0;
+
+  double orderTotal = 0;
+  List<String> totalItems = [];
+
+  @override
+  void initState() {
+
+    if (widget.loadState == "first")
+    {
+
+    }
+    if (widget.loadState == "empty")
+    {
+      orderTotal = widget.orderTotal;
+      totalItems = widget.totalItems;
+    }
+    if (widget.loadState == "full")
+    {
+      dropDownItems = widget.dropDownItems;
+      dropdownValue = "Selected Items:";
+      orderTotal = widget.orderTotal;
+      totalItems = widget.totalItems;
+      selectedPrices = widget.selectedPrices;
+    }
+    super.initState();
+  }
+
+  void _addItemToOrder() {
+    setState(() {
+      if (dropDownItems[0] == "No Items Selected")
+      {
+        dropDownItems[0] = "Selected Items:";
+        dropdownValue = "Selected Items:";
+        dropDownIndex = dropDownIndex + 1;
+        dropDownItems.add(selectedItem);
+        selectedPrices.add(selectedPrice);
+      } else {
+        dropDownIndex = dropDownIndex + 1;
+        dropDownItems.add(selectedItem);
+        selectedPrices.add(selectedPrice);
+      }
+    });
+  }
+
+
+
+  void _placeOrder() {
+    setState(() {
+      for(int i = 0; i < selectedPrices.length; i++)
+      {
+        orderTotal = orderTotal + selectedPrices[i];
+      }
+
+      for(int i = 1; i < dropDownItems.length; i++)
+      {
+        totalItems.add(dropDownItems[i]);
+      }
+
+
+      dropdownValue = "No Items Selected";
+      dropDownItems = ["No Items Selected"];
+
+      selectedPrices = [0];
+
+
+
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+
+    final ButtonStyle style =
+    TextButton.styleFrom(primary: Theme.of(context).colorScheme.onPrimary);
+
+    return Scaffold(
+      appBar: AppBar(
+        // Here we take the value from the MyHomePage object that was created by
+        // the App.build method, and use it to set our appbar title.
+        title: Text(widget.title),
+        actions: <Widget>[
+          Center(
+            child:Text("View selected foods:     "),
+          ),
+          DropdownButton<String>(
+            value: dropdownValue,
+            iconSize: 24,
+            elevation: 16,
+            style: const TextStyle(color: Colors.deepPurple),
+            underline: Container(
+              height: 2,
+              color: Colors.deepPurpleAccent,
+            ),
+            onChanged: (String? newValue) {
+              setState(() {
+
+                for(int i = 0; i < dropDownItems.length; i++)
+                {
+                  if (dropDownItems[i] == newValue!)
+                  {
+                    if (i != 0)
+                    {
+                      dropDownItems.removeAt(i);
+                      i = dropDownItems.length + 1;
+                    }
+                    if (i == 0)
+                    {
+                      i = dropDownItems.length + 1;
+                    }
+                  }
+                }
+
+              });
+            },
+            items: dropDownItems
+                .map<DropdownMenuItem<String>>((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Wrap(
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  children: [
+                    Text(value.toString()+ "    "),
+                    Icon(Icons.cancel,
+                        color: Colors.red),
+                  ],
+                ),
+              );
+            }).toList(),
+          ),
+
+          FloatingActionButton(
+            heroTag: "btn1",
+            onPressed: () {
+
+              _placeOrder();
+
+
+            },
+            tooltip: 'Place Order',
+            child: const Icon(Icons.check),
+          ),
+
+          Center(
+            child:Text("Your Total:     \$" + orderTotal.toString()),
+          ),
+
+          FloatingActionButton(
+            heroTag: "btn2",
+            onPressed: () {
+
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => MyBillPage(title: 'Pay Bill', totalList: totalItems, totalCost: orderTotal)),
+              );
+
+
+            },
+            tooltip: 'Ask for check',
+            child: const Icon(Icons.attach_money),
+          ),
+          FloatingActionButton(
+            heroTag: "btn3",
+            onPressed: () {
+
+
+
+
+            },
+            tooltip: 'Open drink menu',
+            child: const Icon(Icons.settings),
+          ),
+
+        ],
+
+
+      ),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            DrawerHeader(
+              decoration: BoxDecoration(
+                color: Colors.blue,
+              ),
+              child: Text(
+                'Food Selection',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 24,
+                ),
+              ),
+            ),
+            ListTile(
+
+              title: Text(
+                'Main Courses: ',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 20,
+                ),
+              ),
+            ),
+            ListTile(
+                leading: Image(
+                  image: AssetImage('assets/images/nocheese.png'),
+                ),
+                title: Text(items[0]),
+                onTap: () {
+                  setState(() {
+                    _imageSrc = 'assets/images/nocheese.png';
+                    selectedItem = items[0];
+                    selectedPrice = prices[0];
+                  }
+                  );
+                }
+            ),
+            ListTile(
+                leading: Image(
+                  image: AssetImage('assets/images/burger.png'),
+                ),
+                title: Text(items[1]),
+                onTap: () {
+                  setState(() {
+                    _imageSrc = 'assets/images/burger.png';
+                    selectedItem = items[1];
+                    selectedPrice = prices[1];
+                  }
+                  );
+                }
+            ),
+            ListTile(
+                leading: Image(
+                  image: AssetImage('assets/images/grilledcheese.png'),
+                ),
+                title: Text(items[2]),
+                onTap: () {
+                  setState(() {
+                    _imageSrc = 'assets/images/grilledcheese.png';
+                    selectedItem = items[2];
+                    selectedPrice = prices[2];
+                  }
+                  );
+                }
+            ),
+            ListTile(
+                leading: Image(
+                  image: AssetImage('assets/images/chickenFinger.png'),
+                ),
+                title: Text(items[3]),
+                onTap: () {
+                  setState(() {
+                    _imageSrc = 'assets/images/chickenFinger.png';
+                    selectedItem = items[3];
+                    selectedPrice = prices[3];
+                  }
+                  );
+                }
+            ),
+
+            ListTile(
+
+              title: Text(
+                'Sides: ',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 20,
+                ),
+              ),
+            ),
+
+
+          ],
+        ),
+      ),
+      body: Center(
+
+        // Center is a layout widget. It takes a single child and positions it
+        // in the middle of the parent.
+        child: Container(
+          width: 400,
+          child: Column(
+            children:<Widget> [
+              Text("Food Menu",
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 24,
+                ),
+              ),
+              FloatingActionButton(
+                heroTag: "x",
+                onPressed: () {
+
+                  _addItemToOrder();
+
+                },
+                tooltip: 'Add To Order',
+                child: const Text("Add To Order"),
+              ),
+
+            ],
+
+          ),
+          decoration: new BoxDecoration(
+            color: _colour,
+            image: new DecorationImage(
+              fit: BoxFit.contain,
+              colorFilter: new ColorFilter.mode(Colors.black.withOpacity(_imageTransparency), BlendMode.dstATop),
+              image: new AssetImage(
+                '$_imageSrc',
+              ),
+            ),
+          ),
+
+
+
+        ),
+
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+
+          /* Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => MyHomePage(title: 'title')),
+            ); */
+
+          if (dropdownValue == "No Items Selected") {
+            Navigator.push(context, MaterialPageRoute(builder: (context) =>
+                MyHomePage(title: 'title',
+                    selectedPrices: [0],
+                    dropDownItems: [""],
+                    orderTotal: orderTotal,
+                    totalItems: totalItems,
+                    loadState: "empty")),);
+          } else {
+            Navigator.push(context, MaterialPageRoute(builder: (context) =>
+                MyHomePage(title: 'title',
+                    selectedPrices: selectedPrices,
+                    dropDownItems: dropDownItems,
+                    orderTotal: orderTotal,
+                    totalItems: totalItems,
+                    loadState: "full")),);
+          }
+
+        },
+        tooltip: 'Return Home',
+        child: const Icon(Icons.home),
+      ),
+// This trailing comma makes auto-formatting nicer for build methods.
+    );
+  }
+}
+
 
 class MyBillPage extends StatefulWidget {
   const MyBillPage({Key? key, required this.title, required this.totalList, required this.totalCost}) : super(key: key);

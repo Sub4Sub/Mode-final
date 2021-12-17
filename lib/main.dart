@@ -243,11 +243,27 @@ class _MyHomePageState extends State<MyHomePage> {
                 onPressed: () {
 
 
-
+                  if (dropdownValue == "No Items Selected") {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) =>
+                        MyDrinkMenuPage(title: 'Drink Menu',
+                            selectedPrices: [0],
+                            dropDownItems: [""],
+                            orderTotal: orderTotal,
+                            totalItems: totalItems,
+                            loadState: "empty")),);
+                  } else {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) =>
+                        MyDrinkMenuPage(title: 'Drink Menu',
+                            selectedPrices: selectedPrices,
+                            dropDownItems: dropDownItems,
+                            orderTotal: orderTotal,
+                            totalItems: totalItems,
+                            loadState: "full")),);
+                  }
 
                 },
                 tooltip: 'Open drink menu',
-                child: const Icon(Icons.calculate),
+                child: const Icon(Icons.local_drink),
               ),
             ],
           ),
@@ -334,7 +350,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
 
           Center(
-            child:Text("Your Totals:     \$" + orderTotal.toString() + " / " + widget.loadState),
+            child:Text("Your Totals:     \$" + orderTotal.toString()),
           ),
 
           FloatingActionButton(
@@ -400,7 +416,6 @@ class _MyHomePageState extends State<MyHomePage> {
 //
 //
  */
-
 
 class MyFoodMenuPage extends StatefulWidget {
   const MyFoodMenuPage({Key? key, required this.title, required this.selectedPrices, required this.dropDownItems, required this.totalItems, required this.orderTotal, required this.loadState}) : super(key: key);
@@ -702,17 +717,6 @@ class _MyFoodMenuPageState extends State<MyFoodMenuPage> {
                 }
             ),
 
-            ListTile(
-
-              title: Text(
-                'Sides: ',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 20,
-                ),
-              ),
-            ),
-
 
           ],
         ),
@@ -823,15 +827,15 @@ class MyDrinkMenuPage extends StatefulWidget {
 }
 
 class _MyDrinkMenuPageState extends State<MyDrinkMenuPage> {
-  String _imageSrc = 'assets/images/nocheese.png';
+  String _imageSrc = 'assets/images/water.png';
   double _imageTransparency = 1;
   Color _colour = Color(0xff7c94b6);
 
-  List<String> items = ["Hamburger - \$10", "Cheeseburger - \$12", "Grilled Cheese - \$8", "Chicken Fingers - \$8"];
-  List<int> prices = [10, 12, 8, 8];
+  List<String> items = ["Water - \$0", "Coke - \$2", "Beer - \$5"];
+  List<int> prices = [0, 2, 5];
 
-  String selectedItem = "Hamburger - \$10";
-  int selectedPrice = 10;
+  String selectedItem = "Water - \$0";
+  int selectedPrice = 0;
 
   String dropdownValue = "No Items Selected";
   List<String> dropDownItems = ["No Items Selected"];
@@ -919,7 +923,7 @@ class _MyDrinkMenuPageState extends State<MyDrinkMenuPage> {
         title: Text(widget.title),
         actions: <Widget>[
           Center(
-            child:Text("View selected foods:     "),
+            child:Text("View selected drinks:     "),
           ),
           DropdownButton<String>(
             value: dropdownValue,
@@ -1022,7 +1026,7 @@ class _MyDrinkMenuPageState extends State<MyDrinkMenuPage> {
                 color: Colors.blue,
               ),
               child: Text(
-                'Food Selection',
+                'Drink Selection',
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 24,
@@ -1030,23 +1034,13 @@ class _MyDrinkMenuPageState extends State<MyDrinkMenuPage> {
               ),
             ),
             ListTile(
-
-              title: Text(
-                'Main Courses: ',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 20,
-                ),
-              ),
-            ),
-            ListTile(
                 leading: Image(
-                  image: AssetImage('assets/images/nocheese.png'),
+                  image: AssetImage('assets/images/water.png'),
                 ),
                 title: Text(items[0]),
                 onTap: () {
                   setState(() {
-                    _imageSrc = 'assets/images/nocheese.png';
+                    _imageSrc = 'assets/images/water.png';
                     selectedItem = items[0];
                     selectedPrice = prices[0];
                   }
@@ -1055,12 +1049,12 @@ class _MyDrinkMenuPageState extends State<MyDrinkMenuPage> {
             ),
             ListTile(
                 leading: Image(
-                  image: AssetImage('assets/images/burger.png'),
+                  image: AssetImage('assets/images/coke.png'),
                 ),
                 title: Text(items[1]),
                 onTap: () {
                   setState(() {
-                    _imageSrc = 'assets/images/burger.png';
+                    _imageSrc = 'assets/images/coke.png';
                     selectedItem = items[1];
                     selectedPrice = prices[1];
                   }
@@ -1069,42 +1063,17 @@ class _MyDrinkMenuPageState extends State<MyDrinkMenuPage> {
             ),
             ListTile(
                 leading: Image(
-                  image: AssetImage('assets/images/grilledcheese.png'),
+                  image: AssetImage('assets/images/beer.png'),
                 ),
                 title: Text(items[2]),
                 onTap: () {
                   setState(() {
-                    _imageSrc = 'assets/images/grilledcheese.png';
+                    _imageSrc = 'assets/images/beer.png';
                     selectedItem = items[2];
                     selectedPrice = prices[2];
                   }
                   );
                 }
-            ),
-            ListTile(
-                leading: Image(
-                  image: AssetImage('assets/images/chickenFinger.png'),
-                ),
-                title: Text(items[3]),
-                onTap: () {
-                  setState(() {
-                    _imageSrc = 'assets/images/chickenFinger.png';
-                    selectedItem = items[3];
-                    selectedPrice = prices[3];
-                  }
-                  );
-                }
-            ),
-
-            ListTile(
-
-              title: Text(
-                'Sides: ',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 20,
-                ),
-              ),
             ),
 
 
@@ -1189,7 +1158,6 @@ class _MyDrinkMenuPageState extends State<MyDrinkMenuPage> {
     );
   }
 }
-
 
 class MyBillPage extends StatefulWidget {
   const MyBillPage({Key? key, required this.title, required this.totalList, required this.totalCost}) : super(key: key);

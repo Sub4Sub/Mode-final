@@ -65,6 +65,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   List<int> selectedPrices = [0];
 
+  String resturantName = "*Insert name here*";
+
   static const TextStyle titleStyle =
   TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
 
@@ -135,7 +137,7 @@ class _MyHomePageState extends State<MyHomePage> {
           child: Column(
             children: <Widget>[
               Text(
-                'Welcome to *Insert name here*! ',
+                'Welcome to ' + resturantName +'! ',
                 style: titleStyle,
               ),
               Icon(
@@ -371,11 +373,27 @@ class _MyHomePageState extends State<MyHomePage> {
             heroTag: "btn3",
             onPressed: () {
 
-
+              if (dropdownValue == "No Items Selected") {
+                Navigator.push(context, MaterialPageRoute(builder: (context) =>
+                    MySettingsPage(title: 'settings',
+                        selectedPrices: [0],
+                        dropDownItems: [""],
+                        orderTotal: orderTotal,
+                        totalItems: totalItems,
+                        loadState: "empty")),);
+              } else {
+                Navigator.push(context, MaterialPageRoute(builder: (context) =>
+                    MySettingsPage(title: 'settings',
+                        selectedPrices: selectedPrices,
+                        dropDownItems: dropDownItems,
+                        orderTotal: orderTotal,
+                        totalItems: totalItems,
+                        loadState: "full")),);
+              }
 
 
             },
-            tooltip: 'Open drink menu',
+            tooltip: 'Open settings menu',
             child: const Icon(Icons.settings),
           ),
         ],
@@ -623,10 +641,26 @@ class _MyFoodMenuPageState extends State<MyFoodMenuPage> {
             onPressed: () {
 
 
-
+              if (dropdownValue == "No Items Selected") {
+                Navigator.push(context, MaterialPageRoute(builder: (context) =>
+                    MySettingsPage(title: 'settings',
+                        selectedPrices: [0],
+                        dropDownItems: [""],
+                        orderTotal: orderTotal,
+                        totalItems: totalItems,
+                        loadState: "empty")),);
+              } else {
+                Navigator.push(context, MaterialPageRoute(builder: (context) =>
+                    MySettingsPage(title: 'settings',
+                        selectedPrices: selectedPrices,
+                        dropDownItems: dropDownItems,
+                        orderTotal: orderTotal,
+                        totalItems: totalItems,
+                        loadState: "full")),);
+              }
 
             },
-            tooltip: 'Open drink menu',
+            tooltip: 'Open settings menu',
             child: const Icon(Icons.settings),
           ),
 
@@ -1006,7 +1040,23 @@ class _MyDrinkMenuPageState extends State<MyDrinkMenuPage> {
             onPressed: () {
 
 
-
+              if (dropdownValue == "No Items Selected") {
+                Navigator.push(context, MaterialPageRoute(builder: (context) =>
+                    MySettingsPage(title: 'settings',
+                        selectedPrices: [0],
+                        dropDownItems: [""],
+                        orderTotal: orderTotal,
+                        totalItems: totalItems,
+                        loadState: "empty")),);
+              } else {
+                Navigator.push(context, MaterialPageRoute(builder: (context) =>
+                    MySettingsPage(title: 'settings',
+                        selectedPrices: selectedPrices,
+                        dropDownItems: dropDownItems,
+                        orderTotal: orderTotal,
+                        totalItems: totalItems,
+                        loadState: "full")),);
+              }
 
             },
             tooltip: 'Open drink menu',
@@ -1232,6 +1282,232 @@ class _MyBillState extends State<MyBillPage> {
     ],
 
     ),
+    );
+  }
+}
+
+class MySettingsPage extends StatefulWidget {
+  const MySettingsPage({Key? key, required this.title, required this.selectedPrices, required this.dropDownItems, required this.totalItems, required this.orderTotal, required this.loadState}) : super(key: key);
+
+  // This widget is the home page of your application. It is stateful, meaning
+  // that it has a State object (defined below) that contains fields that affect
+  // how it looks.
+
+  // This class is the configuration for the state. It holds the values (in this
+  // case the title) provided by the parent (in this case the App widget) and
+  // used by the build method of the State. Fields in a Widget subclass are
+  // always marked "final".
+
+  final String title;
+
+  final List<String> dropDownItems;
+  final List<int> selectedPrices;
+
+  final double orderTotal;
+  final List<String> totalItems;
+
+  final String loadState;
+
+  @override
+  State<MySettingsPage> createState() => _MySettingsPageState();
+}
+
+class _MySettingsPageState extends State<MySettingsPage> {
+  int _selectedIndex = 0;
+  String dropdownValue = "No Items Selected";
+  List<String> dropDownItems = ["No Items Selected"];
+
+  double orderTotal = 0;
+  List<String> totalItems = [];
+
+  List<int> selectedPrices = [0];
+
+  Color _colour = Color(0xff7c94b6);
+
+
+
+  static const TextStyle titleStyle =
+  TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+
+  static const TextStyle descStyle =
+  TextStyle(fontSize: 16, fontWeight: FontWeight.bold);
+
+
+  @override
+  void initState() {
+
+    if (widget.loadState == "first")
+    {
+
+    }
+    if (widget.loadState == "empty")
+    {
+      orderTotal = widget.orderTotal;
+      totalItems = widget.totalItems;
+    }
+    if (widget.loadState == "full")
+    {
+      dropDownItems = widget.dropDownItems;
+      dropdownValue = "Selected Items:";
+      orderTotal = widget.orderTotal;
+      totalItems = widget.totalItems;
+      selectedPrices = widget.selectedPrices;
+    }
+    super.initState();
+  }
+
+
+
+  void _placeOrder() {
+    setState(() {
+      for(int i = 0; i < selectedPrices.length; i++)
+      {
+        orderTotal = orderTotal + selectedPrices[i];
+      }
+
+      for(int i = 1; i < dropDownItems.length; i++)
+      {
+        totalItems.add(dropDownItems[i]);
+      }
+
+
+      dropdownValue = "No Items Selected";
+      dropDownItems = ["No Items Selected"];
+
+      selectedPrices = [0];
+
+
+
+    });
+  }
+
+
+
+  @override
+  Widget build(BuildContext context) {
+
+
+    return new WillPopScope(
+      onWillPop: () async => false,
+      child: new Scaffold(
+        backgroundColor: Colors.redAccent,
+        appBar: AppBar(
+          // Here we take the value from the MyHomePage object that was created by
+          // the App.build method, and use it to set our appbar title.
+          title: Text("Menu Home Page"),
+          actions: <Widget> [
+            Center(
+              child:Text("View selected foods:     "),
+            ),
+            DropdownButton<String>(
+              value: dropdownValue,
+              iconSize: 24,
+              elevation: 16,
+              style: const TextStyle(color: Colors.deepPurple),
+              underline: Container(
+                height: 2,
+                color: Colors.deepPurpleAccent,
+              ),
+              onChanged: (String? newValue) {
+                setState(() {
+                  for(int i = 0; i < dropDownItems.length; i++)
+                  {
+                    if (dropDownItems[i] == newValue!)
+                    {
+                      if (i != 0)
+                      {
+                        dropDownItems.removeAt(i);
+                        i = dropDownItems.length + 1;
+                      }
+                      if (i == 0)
+                      {
+                        i = dropDownItems.length + 1;
+                      }
+                    }
+                  }
+                });
+
+              },
+              items: dropDownItems
+                  .map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Wrap(
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: [
+                      Text(value.toString()+ "    "),
+                      Icon(Icons.cancel,
+                          color: Colors.red),
+                    ],
+                  ),
+                );
+              }).toList(),
+            ),
+
+            FloatingActionButton(
+              heroTag: "btn1",
+              onPressed: () {
+
+                _placeOrder();
+
+
+              },
+              tooltip: 'Place Order',
+              child: const Icon(Icons.check),
+            ),
+
+            Center(
+              child:Text("Your Totals:     \$" + orderTotal.toString()),
+            ),
+
+            FloatingActionButton(
+              heroTag: "btn2",
+              onPressed: () {
+
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => MyBillPage(title: 'Pay Bill', totalList: totalItems, totalCost: orderTotal)),
+                );
+
+
+              },
+              tooltip: 'Ask for check',
+              child: const Icon(Icons.attach_money),
+            ),
+            FloatingActionButton(
+              heroTag: "btn3",
+              onPressed: () {
+
+
+                if (dropdownValue == "No Items Selected") {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) =>
+                      MyHomePage(title: 'main menu',
+                          selectedPrices: [0],
+                          dropDownItems: [""],
+                          orderTotal: orderTotal,
+                          totalItems: totalItems,
+                          loadState: "empty")),);
+                } else {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) =>
+                      MyHomePage(title: 'main menu',
+                          selectedPrices: selectedPrices,
+                          dropDownItems: dropDownItems,
+                          orderTotal: orderTotal,
+                          totalItems: totalItems,
+                          loadState: "full")),);
+                }
+
+              },
+              tooltip: 'Return Home',
+              child: const Icon(Icons.home),
+            ),
+          ],
+        ),
+
+        body: Center(
+
+        ),
+      ),
     );
   }
 }

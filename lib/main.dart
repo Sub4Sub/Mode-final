@@ -24,13 +24,13 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Menu Home Page', selectedPrices: [0], dropDownItems: [""], orderTotal: 0, totalItems: [""], loadState: "first"),
+      home: const MyHomePage(title: 'Menu Home Page', selectedPrices: [0], dropDownItems: [""], orderTotal: 0, totalItems: [""], loadState: "first", colour: Color(0xffffffff)),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title, required this.selectedPrices, required this.dropDownItems, required this.totalItems, required this.orderTotal, required this.loadState}) : super(key: key);
+  const MyHomePage({Key? key, required this.title, required this.selectedPrices, required this.dropDownItems, required this.totalItems, required this.orderTotal, required this.loadState, required this.colour}) : super(key: key);
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -51,6 +51,8 @@ class MyHomePage extends StatefulWidget {
 
   final String loadState;
 
+  final Color colour;
+
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
@@ -64,6 +66,8 @@ class _MyHomePageState extends State<MyHomePage> {
   List<String> totalItems = [];
 
   List<int> selectedPrices = [0];
+
+  Color _colour = Color(0xffffff);
 
   String resturantName = "*Insert name here*";
 
@@ -79,12 +83,13 @@ class _MyHomePageState extends State<MyHomePage> {
 
     if (widget.loadState == "first")
       {
-
+        _colour = widget.colour;
       }
     if (widget.loadState == "empty")
       {
         orderTotal = widget.orderTotal;
         totalItems = widget.totalItems;
+        _colour = widget.colour;
       }
     if (widget.loadState == "full")
       {
@@ -93,6 +98,7 @@ class _MyHomePageState extends State<MyHomePage> {
           orderTotal = widget.orderTotal;
           totalItems = widget.totalItems;
           selectedPrices = widget.selectedPrices;
+          _colour = widget.colour;
       }
     super.initState();
   }
@@ -199,7 +205,8 @@ class _MyHomePageState extends State<MyHomePage> {
                             dropDownItems: [""],
                             orderTotal: orderTotal,
                             totalItems: totalItems,
-                            loadState: "empty")),);
+                            loadState: "empty",
+                            colour: _colour)),);
                   } else {
                     Navigator.push(context, MaterialPageRoute(builder: (context) =>
                         MyFoodMenuPage(title: 'Food Menu',
@@ -207,7 +214,8 @@ class _MyHomePageState extends State<MyHomePage> {
                             dropDownItems: dropDownItems,
                             orderTotal: orderTotal,
                             totalItems: totalItems,
-                            loadState: "full")),);
+                            loadState: "full",
+                            colour: _colour)),);
                   }
 
                 },
@@ -252,7 +260,8 @@ class _MyHomePageState extends State<MyHomePage> {
                             dropDownItems: [""],
                             orderTotal: orderTotal,
                             totalItems: totalItems,
-                            loadState: "empty")),);
+                            loadState: "empty",
+                            colour: _colour)),);
                   } else {
                     Navigator.push(context, MaterialPageRoute(builder: (context) =>
                         MyDrinkMenuPage(title: 'Drink Menu',
@@ -260,7 +269,8 @@ class _MyHomePageState extends State<MyHomePage> {
                             dropDownItems: dropDownItems,
                             orderTotal: orderTotal,
                             totalItems: totalItems,
-                            loadState: "full")),);
+                            loadState: "full",
+                            colour: _colour)),);
                   }
 
                 },
@@ -285,7 +295,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return new WillPopScope(
         onWillPop: () async => false,
     child: new Scaffold(
-      backgroundColor: Colors.redAccent,
+      backgroundColor: _colour,
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
@@ -380,7 +390,8 @@ class _MyHomePageState extends State<MyHomePage> {
                         dropDownItems: [""],
                         orderTotal: orderTotal,
                         totalItems: totalItems,
-                        loadState: "empty")),);
+                        loadState: "empty",
+                        colour: _colour)),);
               } else {
                 Navigator.push(context, MaterialPageRoute(builder: (context) =>
                     MySettingsPage(title: 'settings',
@@ -388,7 +399,8 @@ class _MyHomePageState extends State<MyHomePage> {
                         dropDownItems: dropDownItems,
                         orderTotal: orderTotal,
                         totalItems: totalItems,
-                        loadState: "full")),);
+                        loadState: "full",
+                        colour: _colour)),);
               }
 
 
@@ -436,7 +448,7 @@ class _MyHomePageState extends State<MyHomePage> {
  */
 
 class MyFoodMenuPage extends StatefulWidget {
-  const MyFoodMenuPage({Key? key, required this.title, required this.selectedPrices, required this.dropDownItems, required this.totalItems, required this.orderTotal, required this.loadState}) : super(key: key);
+  const MyFoodMenuPage({Key? key, required this.title, required this.selectedPrices, required this.dropDownItems, required this.totalItems, required this.orderTotal, required this.loadState, required this.colour}) : super(key: key);
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -456,6 +468,8 @@ class MyFoodMenuPage extends StatefulWidget {
   final List<String> totalItems;
 
   final String loadState;
+
+  final Color colour;
 
   @override
   State<MyFoodMenuPage> createState() => _MyFoodMenuPageState();
@@ -485,12 +499,13 @@ class _MyFoodMenuPageState extends State<MyFoodMenuPage> {
 
     if (widget.loadState == "first")
     {
-
+      _colour = widget.colour;
     }
     if (widget.loadState == "empty")
     {
       orderTotal = widget.orderTotal;
       totalItems = widget.totalItems;
+      _colour = widget.colour;
     }
     if (widget.loadState == "full")
     {
@@ -499,6 +514,7 @@ class _MyFoodMenuPageState extends State<MyFoodMenuPage> {
       orderTotal = widget.orderTotal;
       totalItems = widget.totalItems;
       selectedPrices = widget.selectedPrices;
+      _colour = widget.colour;
     }
     super.initState();
   }
@@ -552,6 +568,7 @@ class _MyFoodMenuPageState extends State<MyFoodMenuPage> {
     TextButton.styleFrom(primary: Theme.of(context).colorScheme.onPrimary);
 
     return Scaffold(
+      backgroundColor: _colour,
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
@@ -648,7 +665,8 @@ class _MyFoodMenuPageState extends State<MyFoodMenuPage> {
                         dropDownItems: [""],
                         orderTotal: orderTotal,
                         totalItems: totalItems,
-                        loadState: "empty")),);
+                        loadState: "empty",
+                        colour: _colour)),);
               } else {
                 Navigator.push(context, MaterialPageRoute(builder: (context) =>
                     MySettingsPage(title: 'settings',
@@ -656,7 +674,8 @@ class _MyFoodMenuPageState extends State<MyFoodMenuPage> {
                         dropDownItems: dropDownItems,
                         orderTotal: orderTotal,
                         totalItems: totalItems,
-                        loadState: "full")),);
+                        loadState: "full",
+                        colour: _colour)),);
               }
 
             },
@@ -814,7 +833,8 @@ class _MyFoodMenuPageState extends State<MyFoodMenuPage> {
                     dropDownItems: [""],
                     orderTotal: orderTotal,
                     totalItems: totalItems,
-                    loadState: "empty")),);
+                    loadState: "empty",
+                    colour: _colour)),);
           } else {
             Navigator.push(context, MaterialPageRoute(builder: (context) =>
                 MyHomePage(title: 'title',
@@ -822,7 +842,8 @@ class _MyFoodMenuPageState extends State<MyFoodMenuPage> {
                     dropDownItems: dropDownItems,
                     orderTotal: orderTotal,
                     totalItems: totalItems,
-                    loadState: "full")),);
+                    loadState: "full",
+                    colour: _colour)),);
           }
 
         },
@@ -835,7 +856,7 @@ class _MyFoodMenuPageState extends State<MyFoodMenuPage> {
 }
 
 class MyDrinkMenuPage extends StatefulWidget {
-  const MyDrinkMenuPage({Key? key, required this.title, required this.selectedPrices, required this.dropDownItems, required this.totalItems, required this.orderTotal, required this.loadState}) : super(key: key);
+  const MyDrinkMenuPage({Key? key, required this.title, required this.selectedPrices, required this.dropDownItems, required this.totalItems, required this.orderTotal, required this.loadState, required this.colour}) : super(key: key);
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -855,6 +876,8 @@ class MyDrinkMenuPage extends StatefulWidget {
   final List<String> totalItems;
 
   final String loadState;
+
+  final Color colour;
 
   @override
   State<MyDrinkMenuPage> createState() => _MyDrinkMenuPageState();
@@ -884,12 +907,13 @@ class _MyDrinkMenuPageState extends State<MyDrinkMenuPage> {
 
     if (widget.loadState == "first")
     {
-
+      _colour = widget.colour;
     }
     if (widget.loadState == "empty")
     {
       orderTotal = widget.orderTotal;
       totalItems = widget.totalItems;
+      _colour = widget.colour;
     }
     if (widget.loadState == "full")
     {
@@ -898,6 +922,7 @@ class _MyDrinkMenuPageState extends State<MyDrinkMenuPage> {
       orderTotal = widget.orderTotal;
       totalItems = widget.totalItems;
       selectedPrices = widget.selectedPrices;
+      _colour = widget.colour;
     }
     super.initState();
   }
@@ -951,6 +976,7 @@ class _MyDrinkMenuPageState extends State<MyDrinkMenuPage> {
     TextButton.styleFrom(primary: Theme.of(context).colorScheme.onPrimary);
 
     return Scaffold(
+      backgroundColor: _colour,
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
@@ -1047,7 +1073,8 @@ class _MyDrinkMenuPageState extends State<MyDrinkMenuPage> {
                         dropDownItems: [""],
                         orderTotal: orderTotal,
                         totalItems: totalItems,
-                        loadState: "empty")),);
+                        loadState: "empty",
+                    colour: _colour)),);
               } else {
                 Navigator.push(context, MaterialPageRoute(builder: (context) =>
                     MySettingsPage(title: 'settings',
@@ -1055,7 +1082,8 @@ class _MyDrinkMenuPageState extends State<MyDrinkMenuPage> {
                         dropDownItems: dropDownItems,
                         orderTotal: orderTotal,
                         totalItems: totalItems,
-                        loadState: "full")),);
+                        loadState: "full",
+                        colour: _colour)),);
               }
 
             },
@@ -1189,7 +1217,8 @@ class _MyDrinkMenuPageState extends State<MyDrinkMenuPage> {
                     dropDownItems: [""],
                     orderTotal: orderTotal,
                     totalItems: totalItems,
-                    loadState: "empty")),);
+                    loadState: "empty",
+                    colour: _colour)),);
           } else {
             Navigator.push(context, MaterialPageRoute(builder: (context) =>
                 MyHomePage(title: 'title',
@@ -1197,7 +1226,8 @@ class _MyDrinkMenuPageState extends State<MyDrinkMenuPage> {
                     dropDownItems: dropDownItems,
                     orderTotal: orderTotal,
                     totalItems: totalItems,
-                    loadState: "full")),);
+                    loadState: "full",
+                    colour: _colour)),);
           }
 
         },
@@ -1269,7 +1299,8 @@ class _MyBillState extends State<MyBillPage> {
                   dropDownItems: [""],
                   orderTotal: 0,
                   totalItems: [""],
-                  loadState: "first")),
+                  loadState: "first",
+                  colour: Color(0xffffffff))),
           );
 
 
@@ -1287,7 +1318,7 @@ class _MyBillState extends State<MyBillPage> {
 }
 
 class MySettingsPage extends StatefulWidget {
-  const MySettingsPage({Key? key, required this.title, required this.selectedPrices, required this.dropDownItems, required this.totalItems, required this.orderTotal, required this.loadState}) : super(key: key);
+  const MySettingsPage({Key? key, required this.title, required this.selectedPrices, required this.dropDownItems, required this.totalItems, required this.orderTotal, required this.loadState, required this.colour}) : super(key: key);
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -1308,6 +1339,8 @@ class MySettingsPage extends StatefulWidget {
 
   final String loadState;
 
+  final Color colour;
+
   @override
   State<MySettingsPage> createState() => _MySettingsPageState();
 }
@@ -1325,6 +1358,8 @@ class _MySettingsPageState extends State<MySettingsPage> {
   Color _colour = Color(0xff7c94b6);
 
 
+  String dropdownValue2 = 'Light';
+
 
   static const TextStyle titleStyle =
   TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
@@ -1338,12 +1373,13 @@ class _MySettingsPageState extends State<MySettingsPage> {
 
     if (widget.loadState == "first")
     {
-
+      _colour = widget.colour;
     }
     if (widget.loadState == "empty")
     {
       orderTotal = widget.orderTotal;
       totalItems = widget.totalItems;
+      _colour = widget.colour;
     }
     if (widget.loadState == "full")
     {
@@ -1352,6 +1388,7 @@ class _MySettingsPageState extends State<MySettingsPage> {
       orderTotal = widget.orderTotal;
       totalItems = widget.totalItems;
       selectedPrices = widget.selectedPrices;
+      _colour = widget.colour;
     }
     super.initState();
   }
@@ -1381,6 +1418,27 @@ class _MySettingsPageState extends State<MySettingsPage> {
     });
   }
 
+  _changeTheme(String value) {
+    setState(() {
+          if (value == "Light")
+            {
+              _colour = Color(0xFFFFFF);
+            }
+          if (value == "Dark")
+          {
+            _colour = Color(0xff0000);
+          }
+          if (value == "Sunrise")
+          {
+            _colour = Color(0xffffcc80);
+          }
+          if (value == "Dawn")
+          {
+            _colour = Color(0xffba68c8);
+          }
+    });
+  }
+
 
 
   @override
@@ -1390,7 +1448,7 @@ class _MySettingsPageState extends State<MySettingsPage> {
     return new WillPopScope(
       onWillPop: () async => false,
       child: new Scaffold(
-        backgroundColor: Colors.redAccent,
+        backgroundColor: _colour,
         appBar: AppBar(
           // Here we take the value from the MyHomePage object that was created by
           // the App.build method, and use it to set our appbar title.
@@ -1486,7 +1544,8 @@ class _MySettingsPageState extends State<MySettingsPage> {
                           dropDownItems: [""],
                           orderTotal: orderTotal,
                           totalItems: totalItems,
-                          loadState: "empty")),);
+                          loadState: "empty",
+                          colour: _colour)),);
                 } else {
                   Navigator.push(context, MaterialPageRoute(builder: (context) =>
                       MyHomePage(title: 'main menu',
@@ -1494,7 +1553,8 @@ class _MySettingsPageState extends State<MySettingsPage> {
                           dropDownItems: dropDownItems,
                           orderTotal: orderTotal,
                           totalItems: totalItems,
-                          loadState: "full")),);
+                          loadState: "full",
+                          colour: _colour)),);
                 }
 
               },
@@ -1506,6 +1566,66 @@ class _MySettingsPageState extends State<MySettingsPage> {
 
         body: Center(
 
+            // Center is a layout widget. It takes a single child and positions it
+            // in the middle of the parent.
+            child: Container(
+              width: 400,
+              child: Column(
+                children:<Widget> [
+                  Text("Settings Menu",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 24,
+                    ),
+                  ),
+
+                  Text("Change Theme",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 16,
+                    ),
+                  ),
+
+              DropdownButton<String>(
+                value: dropdownValue2,
+                icon: const Icon(Icons.arrow_downward),
+                elevation: 16,
+                style: const TextStyle(color: Colors.deepPurple),
+                underline: Container(
+                  height: 2,
+                  color: Colors.deepPurpleAccent,
+                ),
+                onChanged: (String? newValue) {
+                  setState(() {
+                    dropdownValue2 = newValue!;
+                  });
+                },
+                items: <String>['Light', 'Dark', 'Sunrise', 'Dawn']
+                    .map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+              ),
+
+                  FloatingActionButton(
+                    heroTag: "x",
+                    onPressed: () {
+
+                      _changeTheme(dropdownValue2);
+
+                    },
+                    tooltip: 'Add To Order',
+                    child: const Text("Add To Order"),
+                  ),
+
+                ],
+
+              ),
+
+
+          ),
         ),
       ),
     );
